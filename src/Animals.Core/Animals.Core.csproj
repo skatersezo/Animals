@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.15" />
       <PackageReference Include="Paramore.Brighter" Version="9.7.6" />
@@ -17,6 +18,15 @@
       <None Update="Data\animalData.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+        <HintPath>..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\7.0.9\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Routing.Abstractions">
+        <HintPath>..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\7.0.9\Microsoft.AspNetCore.Routing.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

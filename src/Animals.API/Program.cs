@@ -1,8 +1,12 @@
+using Animals.API.Builders;
+using Animals.API.Builders.ViewBuilders;
+using Animals.API.Views;
 using Animals.Core.Adaptors.Db;
+using Animals.Core.Adaptors.Rest;
+using Animals.Core.Domain.Models;
 using Animals.Core.Ports.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Linq;
 using Paramore.Brighter.Extensions.DependencyInjection;
 using Paramore.Darker.AspNetCore;
 using Paramore.Darker.Policies;
@@ -22,6 +26,22 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<AnimalContext>(options => options.UseInMemoryDatabase("AnimalsDB"));
+builder.Services.AddScoped<IAmALinkBuilder, LinkBuilder>();
+builder.Services.AddHttpContextAccessor();
+
+// Register all implementations of IViewBuilder
+var viewBuilderInterfaceType = typeof(IViewBuilder<,>);
+var viewBuilderTypes = AppDomain.CurrentDomain.GetAssemblies()
+    .SelectMany(s => s.GetTypes())
+    .Where(p => p.IsClass && !p.IsAbstract && p.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType));
+
+foreach (var viewBuilderType in viewBuilderTypes)
+{
+    foreach (var interfaceType in viewBuilderType.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType))
+    {
+        builder.Services.AddScoped(interfaceType, viewBuilderType);
+    }
+}
 
 builder.Services.AddBrighter()
     .AutoFromAssemblies();

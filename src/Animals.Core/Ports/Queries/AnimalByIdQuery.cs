@@ -1,4 +1,5 @@
 using Animals.Core.Domain;
+using Animals.Core.Domain.Models;
 using Paramore.Darker;
 
 namespace Animals.Core.Ports.Queries;
@@ -13,17 +14,19 @@ public class AnimalByIdQuery : IQuery<AnimalByIdQuery.Result<Animal>>
     public int AnimalId { get; }
 
     
-    public sealed class Result<T> where T : Animal 
+    public sealed class Result<T> where T : Animal
     {
-        public string Classification { get; }
-        public string Species { get; }
-        public string Sound { get; }
+        public AnimalModel AnimalModel;
         
         public Result(T animal)
         {
-            Classification = animal.Classification;
-            Species = animal.Species;
-            Sound = animal.Sound;
+            AnimalModel = new AnimalModel
+            {
+                Id = animal.Id,
+                Classification = animal.Classification,
+                Species = animal.Species,
+                Sound = animal.Sound
+            };
         }
     }
 }

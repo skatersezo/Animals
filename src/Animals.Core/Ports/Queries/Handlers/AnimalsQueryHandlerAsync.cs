@@ -1,6 +1,7 @@
 using Animals.Core.Adaptors.Db;
 using Animals.Core.Adaptors.Repositories;
 using Animals.Core.Domain;
+using Animals.Core.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Paramore.Darker;
 
@@ -10,25 +11,26 @@ public class AnimalsQueryHandlerAsync : QueryHandlerAsync<AnimalsQuery, AnimalsQ
 {
     private readonly DbContextOptions<AnimalContext> _contextOptions;
 
-    public AnimalsQueryHandlerAsync(DbContextOptions<AnimalContext> contextOptions)
+    public AnimalsQueryHandlerAsync(
+        DbContextOptions<AnimalContext> contextOptions)
     {
         _contextOptions = contextOptions;
     }
 
     public override async Task<AnimalsQuery.Result> ExecuteAsync(AnimalsQuery query, CancellationToken cancellationToken = new CancellationToken())
     {
-        List<Animal> animals = new List<Animal>();
-
         await using var uow = new AnimalContext(_contextOptions);
-        var dogsRepo = new DogRepositoryAsync(uow);
-        var catsRepo = new CatRepositoryAsync(uow);
-        var pigeonsRepo = new PigeonRepositoryAsync(uow);
-            
-        animals.AddRange(await dogsRepo.GetAllAsync(cancellationToken));
-        animals.AddRange(await catsRepo.GetAllAsync(cancellationToken));
-        animals.AddRange(await pigeonsRepo.GetAllAsync(cancellationToken));
+        var repo = new AnimalRepositoryAsync<Animal>(uow);
+        var animals = await repo.GetAllAsync(cancellationToken);
 
-        return new AnimalsQuery.Result(animals.Select(a => new AnimalByIdQuery.Result<Animal>(a)));
-
+        var result = new AnimalsQuery.Result(animals.Select(a => new AnimalModel
+        {
+            Id = a.Id,
+            Classification = a.Classification,
+            Species = a.Species,
+            Sound = a.Sound
+        }).ToList());
+        
+        return result;
     }
 }
