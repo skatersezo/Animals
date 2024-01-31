@@ -1,0 +1,17 @@
+[
+  { "type": "Dog", "name": "Buddy" },
+  { "type": "Pigeon", "colour": "Gray" },
+  { "type": "Cat", "favouriteToy": "Mouse" },
+  { "type": "Dog", "name": "Max" },
+  { "type": "Pigeon", "colour": "White" },
+  { "type": "Cat", "favouriteToy": "Feather" },
+  { "type": "Dog", "name": "Charlie" },
+  { "type": "Pigeon", "colour": "Brown" },
+  { "type": "Cat", "favouriteToy": "Ball" },
+  { "type": "Dog", "name": "Lucy" },
+  { "type": "Pigeon", "colour": "Black" },
+  { "type": "Cat", "favouriteToy": "String" },
+  { "type": "Dog", "name": "Cooper" },
+  { "type": "Pigeon", "colour": "Red" },
+  { "type": "Cat", "favouriteToy": "Fish" }
+]
