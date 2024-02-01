@@ -19,7 +19,7 @@ public class DogQueryTests
     public void Setup()
     {
         _options = new DbContextOptionsBuilder<AnimalContext>()
-            .UseInMemoryDatabase("QueryUnitTestsDb")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new AnimalContext(_options);

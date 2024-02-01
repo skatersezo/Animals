@@ -108,8 +108,10 @@ public class ViewBuilderTests
             {
                 _linkBuilder.Build(Rels.Self, HttpMethods.Get, RouteNames.GetDog, new { Id = model.Id }),
                 _linkBuilder.Build(Rels.Parent, HttpMethods.Get, RouteNames.GetMammal, new { Id = model.Id }),
+                _linkBuilder.Build(Rels.ListAll, HttpMethods.Get, RouteNames.GetDogs),
                 _linkBuilder.Build(Rels.Add, HttpMethods.Post, RouteNames.AddDog),
-                _linkBuilder.Build(Rels.Edit, HttpMethods.Put, RouteNames.UpdateDog, new { Id = model.Id })
+                _linkBuilder.Build(Rels.Edit, HttpMethods.Put, RouteNames.EditDog, new { Id = model.Id }),
+                _linkBuilder.Build(Rels.Delete, HttpMethods.Delete, RouteNames.DeleteDog, new { Id = model.Id })
             });
     }
 }

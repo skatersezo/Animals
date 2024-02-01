@@ -4,6 +4,7 @@ using Animals.Core.Ports.Exceptions;
 using Animals.Core.Ports.Queries;
 using Animals.Core.Ports.Queries.Handlers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using NUnit.Framework;
 using Shouldly;
 
@@ -14,12 +15,13 @@ public class AnimalQueryTests
 {
     private AnimalContext _context;
     private DbContextOptions<AnimalContext> _options;
-
+    private IDbContextTransaction _transaction;
+    
     [SetUp]
     public void Setup()
     {
         _options = new DbContextOptionsBuilder<AnimalContext>()
-            .UseInMemoryDatabase("QueryUnitTestsDb")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new AnimalContext(_options);

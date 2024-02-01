@@ -17,7 +17,7 @@ public class AddDogCommandHandlerTests
     public void Setup()
     {
         _options = new DbContextOptionsBuilder<AnimalContext>()
-            .UseInMemoryDatabase("CommandUnitTestsDb")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new AnimalContext(_options);

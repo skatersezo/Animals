@@ -8,4 +8,6 @@ public static class Rels
     public const string ListAll = "list-all";
     public const string Add = "add";
     public const string Edit = "edit";
+    public const string Delete = "delete";
+    public const string DeleteAll = "delete-all";
 }
