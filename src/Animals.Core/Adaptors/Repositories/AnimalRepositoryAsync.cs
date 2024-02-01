@@ -35,9 +35,9 @@ public class AnimalRepositoryAsync<T> : IRepositoryAsync<T> where T : Animal
         await _uow.SaveChangesAsync(ct);
     }
 
-    public async Task<T> GetAsync(int id, CancellationToken ct = default)
+    public async Task<T?> GetAsync(int id, CancellationToken ct = default)
     {
-        return await _uow.Set<T>().SingleAsync(c => c.Id == id, ct);
+        return await _uow.Set<T>().SingleOrDefaultAsync(c => c.Id == id, ct);
     }
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default)

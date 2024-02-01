@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Animals.API.Controllers;
 
-public class BirdsController
+[Route("animals/birds")]
+public class BirdsController : Controller
 {
     
 }

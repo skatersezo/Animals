@@ -1,4 +1,3 @@
-using Animals.Core.Domain;
 using Animals.Core.Domain.Models;
 using Paramore.Darker;
 

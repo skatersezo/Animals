@@ -15,7 +15,7 @@ public class LinkBuilder : IAmALinkBuilder
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Link Build(string rel, string method, string endpointName, object? routeValues)
+    public Link Build(string rel, string method, string endpointName, object? routeValues = null)
     {
         return new Link(
             _linkGenerator.GetUriByName(_httpContextAccessor.HttpContext, endpointName, routeValues),

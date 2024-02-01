@@ -1,6 +1,7 @@
 using Animals.Core.Adaptors.Db;
 using Animals.Core.Adaptors.Repositories;
 using Animals.Core.Domain;
+using Animals.Core.Ports.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Paramore.Darker;
 
@@ -21,6 +22,9 @@ public class AnimalByIdQueryHandlerAsync : QueryHandlerAsync<AnimalByIdQuery, An
         var repo = new AnimalRepositoryAsync<Animal>(uow);
 
         var animal = await repo.GetAsync(query.AnimalId, cancellationToken);
+
+        if (animal is null)
+            throw new AnimalNotFoundException($"Animal with id {query.AnimalId} not found");
         
         return new AnimalByIdQuery.Result<Animal>(animal);
     }

@@ -17,7 +17,7 @@ public class AnimalsQueryHandlerAsync : QueryHandlerAsync<AnimalsQuery, AnimalsQ
         _contextOptions = contextOptions;
     }
 
-    public override async Task<AnimalsQuery.Result> ExecuteAsync(AnimalsQuery query, CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<AnimalsQuery.Result> ExecuteAsync(AnimalsQuery query, CancellationToken cancellationToken = new())
     {
         await using var uow = new AnimalContext(_contextOptions);
         var repo = new AnimalRepositoryAsync<Animal>(uow);

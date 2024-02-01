@@ -1,6 +1,6 @@
 using Animals.Core.Adaptors.Rest;
 
-namespace Animals.API.Builders.ViewBuilders;
+namespace Animals.API.Builders;
 
 public abstract class AbstractViewBuilder<TModel, TView> : IViewBuilder<TModel, TView>
 {

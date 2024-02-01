@@ -1,6 +1,4 @@
-using Animals.Core.Adaptors.Rest;
-
-namespace Animals.API.Builders;
+namespace Animals.Core.Adaptors.Rest;
 
 public interface IViewBuilder<in TModel, out TView>
 {

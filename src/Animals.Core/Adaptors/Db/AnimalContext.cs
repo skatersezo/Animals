@@ -31,6 +31,21 @@ public class AnimalContext : DbContext
             e.Property(p => p.Id).ValueGeneratedOnAdd();
             e.HasKey(p => p.Id);
         });
+        
+        modelBuilder.Entity<Dog>(e =>
+        {
+            e.Property(d => d.Name).IsRequired(false);
+        });
+
+        modelBuilder.Entity<Cat>(e =>
+        {
+            e.Property(c => c.FavouriteToy).IsRequired(false);
+        });
+
+        modelBuilder.Entity<Pigeon>(e =>
+        {
+            e.Property(p => p.Colour).IsRequired(false);
+        });
     }
 
     public void SeedData()

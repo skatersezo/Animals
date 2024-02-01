@@ -1,6 +1,10 @@
+using Animals.API.Builders;
 using Animals.API.Controllers.Requests;
+using Animals.API.Views;
 using Animals.Core.Adaptors.Rest;
+using Animals.Core.Domain.Models;
 using Animals.Core.Ports.Commands;
+using Animals.Core.Ports.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Paramore.Brighter;
 using Paramore.Darker;
@@ -12,13 +16,15 @@ public class MammalsController : Controller
 {
     private readonly IQueryProcessor _queryProcessor;
     private readonly IAmACommandProcessor _commandProcessor;
+    private readonly IViewBuilder<DogModel, DogView> _dogViewBuilder;
 
     public MammalsController(
         IQueryProcessor queryProcessor, 
-        IAmACommandProcessor commandProcessor)
+        IAmACommandProcessor commandProcessor, IViewBuilder<DogModel, DogView> dogViewBuilder)
     {
         _queryProcessor = queryProcessor;
         _commandProcessor = commandProcessor;
+        _dogViewBuilder = dogViewBuilder;
     }
     
     [HttpPost("dogs", Name = RouteNames.AddDog)]
@@ -32,21 +38,10 @@ public class MammalsController : Controller
     [HttpPost("dogs/{id:int}", Name = RouteNames.GetDog)]
     public async Task<IActionResult> GetDog([FromRoute] int id)
     {
-        await _queryProcessor.ExecuteAsync(new QueryDogAsync(id));
-        
-        return Ok();
-    }
-}
+        var result = await _queryProcessor.ExecuteAsync(new DogQuery(id));
 
-public class QueryDogAsync : IQuery<QueryDogAsync.Result>
-{
-    public int DogId { get; }
-    public QueryDogAsync(int dogId)
-    {
-        DogId = dogId;
-    }
-    
-    public sealed class Result
-    {
+        var view = _dogViewBuilder.Build(result.DogModel);
+        
+        return Ok(view);
     }
 }

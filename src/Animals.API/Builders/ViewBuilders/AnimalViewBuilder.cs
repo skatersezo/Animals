@@ -34,13 +34,13 @@ public class AnimalViewBuilder : AbstractViewBuilder<AnimalModel, AnimalView>
         switch (model.Species)
         {
             case "Pigeon":
-                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetPigeon, new { Id = model.Id}));
+                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetBird, new { Id = model.Id}));
                 break;
             case "Dog":
-                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetDog, new { Id = model.Id}));
+                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetMammal, new { Id = model.Id}));
                 break;
             case "Cat":
-                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetCat, new { Id = model.Id}));
+                links.Add(_linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetMammal, new { Id = model.Id}));
                 break;
         }
     }

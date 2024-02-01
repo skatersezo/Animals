@@ -4,7 +4,6 @@ using Animals.Core.Adaptors.Rest;
 using Animals.Core.Domain.Models;
 using Animals.Core.Ports.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Paramore.Brighter;
 using Paramore.Darker;
 
 namespace Animals.API.Controllers;

@@ -30,7 +30,9 @@ public class AnimalsViewBuilder : AbstractViewBuilder<List<AnimalModel>, Animals
             AnimalViews = animalViews,
             Links = new List<Link>
             {
-                _linkBuilder.Build(Rels.Self, HttpMethods.Get, RouteNames.GetAnimals)
+                _linkBuilder.Build(Rels.Self, HttpMethods.Get, RouteNames.GetAnimals),
+                _linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetMammals),
+                _linkBuilder.Build(Rels.Child, HttpMethods.Get, RouteNames.GetBirds)
             }
         };
     }
