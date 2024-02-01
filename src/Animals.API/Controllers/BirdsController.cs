@@ -1,5 +1,8 @@
+using Animals.API.Controllers.Requests;
 using Animals.Core.Adaptors.Rest;
+using Animals.Core.Ports.Commands;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Paramore.Brighter;
 using Paramore.Darker;
 
@@ -26,7 +29,9 @@ public class BirdsController : Controller
     [HttpPost("pigeons", Name = RouteNames.AddPigeon)]
     public async Task<IActionResult> AddPigeon([FromBody] AddPigeonRequest request)
     {
-        return StatusCode(StatusCodes.Status418ImATeapot);
+        await _commandProcessor.SendAsync(new AddPigeonCommand(request.Colour));
+        
+        return Ok();
     }
     
     [HttpGet("pigeons", Name = RouteNames.GetPigeons)]
@@ -42,28 +47,20 @@ public class BirdsController : Controller
     }
     
     [HttpPut("pigeons/{id:int}", Name = RouteNames.EditPigeon)]
-    public async Task<IActionResult> EditDog([FromRoute] int id, [FromBody] EditPigeonRequest request)
+    public async Task<IActionResult> EditPigeon([FromRoute] int id, [FromBody] EditPigeonRequest request)
     {
         return StatusCode(StatusCodes.Status418ImATeapot);
     }
     
     [HttpDelete("pigeons/{id:int}", Name = RouteNames.DeletePigeon)]
-    public async Task<IActionResult> DeleteDog([FromRoute] int id)
+    public async Task<IActionResult> DeletePigeon([FromRoute] int id)
     {
         return StatusCode(StatusCodes.Status418ImATeapot);
     }
     
     [HttpDelete("pigeons", Name = RouteNames.DeletePigeons)]
-    public async Task<IActionResult> DeleteDogs()
+    public async Task<IActionResult> DeletePigeons()
     {
         return StatusCode(StatusCodes.Status418ImATeapot);
     }
-}
-
-public class EditPigeonRequest
-{
-}
-
-public class AddPigeonRequest
-{
 }

@@ -85,7 +85,9 @@ public class MammalsController : Controller
     [HttpPost("cats", Name = RouteNames.AddCat)]
     public async Task<IActionResult> AddCat([FromBody] AddCatRequest request)
     {
-        return StatusCode(StatusCodes.Status418ImATeapot);
+        await _commandProcessor.SendAsync(new AddCatCommand(request.FavouriteToy));
+        
+        return Ok();
     }
     
     [HttpGet("cats", Name = RouteNames.GetCats)]
@@ -117,16 +119,4 @@ public class MammalsController : Controller
     {
         return StatusCode(StatusCodes.Status418ImATeapot);
     }
-}
-
-public class EditCatRequest
-{
-}
-
-public class AddCatRequest
-{
-}
-
-public class EditDogRequest
-{
 }
