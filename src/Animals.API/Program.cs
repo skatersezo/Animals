@@ -1,9 +1,6 @@
 using Animals.API.Builders;
-using Animals.API.Builders.ViewBuilders;
-using Animals.API.Views;
 using Animals.Core.Adaptors.Db;
 using Animals.Core.Adaptors.Rest;
-using Animals.Core.Domain.Models;
 using Animals.Core.Ports.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
