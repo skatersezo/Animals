@@ -33,18 +33,7 @@ public class Startup
         services.AddScoped<IAmALinkBuilder, LinkBuilder>();
         services.AddHttpContextAccessor();
 
-        var viewBuilderInterfaceType = typeof(IViewBuilder<,>);
-        var viewBuilderTypes = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => p.IsClass && !p.IsAbstract && p.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType));
-
-        foreach (var viewBuilderType in viewBuilderTypes)
-        {
-            foreach (var interfaceType in viewBuilderType.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType))
-            {
-                services.AddScoped(interfaceType, viewBuilderType);
-            }
-        }
+        AddsViewBuilders(services);
 
         services.AddBrighter()
             .AutoFromAssemblies();
@@ -58,7 +47,23 @@ public class Startup
             opt.AddPolicy("AllowAll", policyBuilder => policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
     }
-    
+
+    private static void AddsViewBuilders(IServiceCollection services)
+    {
+        var viewBuilderInterfaceType = typeof(IViewBuilder<,>);
+        var viewBuilderTypes = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => p.IsClass && !p.IsAbstract && p.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType));
+
+        foreach (var viewBuilderType in viewBuilderTypes)
+        {
+            foreach (var interfaceType in viewBuilderType.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == viewBuilderInterfaceType))
+            {
+                services.AddScoped(interfaceType, viewBuilderType);
+            }
+        }
+    }
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
@@ -70,7 +75,7 @@ public class Startup
 
         app.UseSwagger();
         app.UseSwaggerUI();
-
+        
         app.UseRouting();
 
         app.UseAuthorization();
@@ -82,11 +87,9 @@ public class Startup
 
         app.UseCors("AllowAll");
 
-        using (var scope = app.ApplicationServices.CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<AnimalContext>();
-            context.Database.EnsureCreated();
-            context.SeedData();
-        }
+        using var scope = app.ApplicationServices.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AnimalContext>();
+        context.Database.EnsureCreated();
+        context.SeedData();
     }
 }

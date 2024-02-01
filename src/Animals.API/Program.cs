@@ -1,12 +1,6 @@
 using Animals.API;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    Args = args,
-    ApplicationName = typeof(Program).Assembly.FullName,
-    ContentRootPath = Directory.GetCurrentDirectory(),
-    EnvironmentName = Environments.Development
-});
+var builder = WebApplication.CreateBuilder();
 
 Console.WriteLine($"Application Name: {builder.Environment.ApplicationName}");
 Console.WriteLine($"Environment Name: {builder.Environment.EnvironmentName}");
