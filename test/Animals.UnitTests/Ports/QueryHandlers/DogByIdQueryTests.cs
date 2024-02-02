@@ -10,7 +10,7 @@ using Shouldly;
 namespace Animals.UnitTests.Ports.QueryHandlers;
 
 [TestFixture]
-public class DogQueryTests
+public class DogByIdQueryTests
 {
     private AnimalContext _context;
     private DbContextOptions<AnimalContext> _options;
@@ -42,7 +42,7 @@ public class DogQueryTests
         var handler = new DogByIdQueryHandlerAsync(_options);
         
         // Act
-        var result = await handler.ExecuteAsync(new DogQuery(dog.Id));
+        var result = await handler.ExecuteAsync(new DogByIdQuery(dog.Id));
         
         // Arrange
         result.DogModel.Id.ShouldBe(dog.Id);
@@ -84,7 +84,7 @@ public class DogQueryTests
         var handler = new DogByIdQueryHandlerAsync(_options);
         
         // Act
-        Func<Task<DogQuery.Result>> result = async () => await handler.ExecuteAsync(new DogQuery(id));
+        Func<Task<DogByIdQuery.Result>> result = async () => await handler.ExecuteAsync(new DogByIdQuery(id));
         
         // Arrange
         Should.Throw<DogNotFoundException>(result.Invoke(), $"Dog with id {id} not found");

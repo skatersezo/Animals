@@ -1,8 +1,10 @@
 using Animals.API.Controllers.Requests;
+using Animals.API.Views;
 using Animals.Core.Adaptors.Rest;
+using Animals.Core.Domain.Models;
 using Animals.Core.Ports.Commands;
+using Animals.Core.Ports.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Paramore.Brighter;
 using Paramore.Darker;
 
@@ -13,7 +15,18 @@ public class BirdsController : Controller
 {
     private readonly IQueryProcessor _queryProcessor;
     private readonly IAmACommandProcessor _commandProcessor;
-    
+    private readonly IViewBuilder<PigeonModel, PigeonView> _pigeonViewBuilder;
+
+    public BirdsController(
+        IQueryProcessor queryProcessor, 
+        IAmACommandProcessor commandProcessor, 
+        IViewBuilder<PigeonModel, PigeonView> pigeonViewBuilder)
+    {
+        _queryProcessor = queryProcessor;
+        _commandProcessor = commandProcessor;
+        _pigeonViewBuilder = pigeonViewBuilder;
+    }
+
     [HttpGet(Name = RouteNames.GetBirds)]
     public async Task<IActionResult> GetBirds()
     {
@@ -29,9 +42,13 @@ public class BirdsController : Controller
     [HttpPost("pigeons", Name = RouteNames.AddPigeon)]
     public async Task<IActionResult> AddPigeon([FromBody] AddPigeonRequest request)
     {
-        await _commandProcessor.SendAsync(new AddPigeonCommand(request.Colour));
+        var command = new AddPigeonCommand(request.Colour);
+        await _commandProcessor.SendAsync(command);
+
+        var result = await _queryProcessor.ExecuteAsync(new PigeonByIdQuery(command.PigeonId));
+        var view = _pigeonViewBuilder.Build(result.PigeonModel);
         
-        return Ok();
+        return CreatedAtRoute(RouteNames.GetPigeon, new { id = command.PigeonId }, view);
     }
     
     [HttpGet("pigeons", Name = RouteNames.GetPigeons)]
@@ -43,7 +60,10 @@ public class BirdsController : Controller
     [HttpGet("pigeons/{id:int}", Name = RouteNames.GetPigeon)]
     public async Task<IActionResult> GetPigeon([FromRoute] int id)
     {
-        return StatusCode(StatusCodes.Status418ImATeapot);
+        var result = await _queryProcessor.ExecuteAsync(new PigeonByIdQuery(id));
+        var view = _pigeonViewBuilder.Build(result.PigeonModel);
+
+        return Ok(view);
     }
     
     [HttpPut("pigeons/{id:int}", Name = RouteNames.EditPigeon)]

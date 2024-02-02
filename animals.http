@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:5000
+
+@id = 17
+
+GET {{baseUrl}}/animals HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/animals/{{id}} HTTP/1.1
+Content-Type: application/json
+
+###
+
+POST {{baseUrl}}/animals/birds/pigeons HTTP/1.1
+Content-Type: application/json
+
+{
+    "colour": "blue"
+}
+
+###
+
+POST {{baseUrl}}/animals/mammals/cats HTTP/1.1
+Content-Type: application/json
+
+{
+    "favouriteToy": "ball"
+}
+
+###
+
+POST {{baseUrl}}/animals/mammals/dogs HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Balto"
+}
+
+###
+
+GET {{baseUrl}}/animals/mammals/dogs/{{id}} HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/animals/mammals/cats/{{id}} HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/animals/birds/pigeons/{{id}} HTTP/1.1
+Content-Type: application/json

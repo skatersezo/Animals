@@ -24,7 +24,7 @@ public class AnimalByIdQueryHandlerAsync : QueryHandlerAsync<AnimalByIdQuery, An
         var animal = await repo.GetAsync(query.AnimalId, cancellationToken);
 
         if (animal is null)
-            throw new AnimalNotFoundException($"Animal with id {query.AnimalId} not found");
+            throw new AnimalNotFoundException(query.AnimalId);
         
         return new AnimalByIdQuery.Result<Animal>(animal);
     }

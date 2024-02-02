@@ -18,14 +18,18 @@ public class MammalsController : Controller
     private readonly IQueryProcessor _queryProcessor;
     private readonly IAmACommandProcessor _commandProcessor;
     private readonly IViewBuilder<DogModel, DogView> _dogViewBuilder;
+    private readonly IViewBuilder<CatModel, CatView> _catViewBuilder;
 
     public MammalsController(
         IQueryProcessor queryProcessor, 
-        IAmACommandProcessor commandProcessor, IViewBuilder<DogModel, DogView> dogViewBuilder)
+        IAmACommandProcessor commandProcessor, 
+        IViewBuilder<DogModel, DogView> dogViewBuilder, 
+        IViewBuilder<CatModel, CatView> catViewBuilder)
     {
         _queryProcessor = queryProcessor;
         _commandProcessor = commandProcessor;
         _dogViewBuilder = dogViewBuilder;
+        _catViewBuilder = catViewBuilder;
     }
     
     [HttpGet(Name = RouteNames.GetMammals)]
@@ -43,9 +47,13 @@ public class MammalsController : Controller
     [HttpPost("dogs", Name = RouteNames.AddDog)]
     public async Task<IActionResult> AddDog([FromBody] AddDogRequest request)
     {
-        await _commandProcessor.SendAsync(new AddDogCommand(request.Name));
+        var command = new AddDogCommand(request.Name);
+        await _commandProcessor.SendAsync(command);
         
-        return Ok();
+        var result = await _queryProcessor.ExecuteAsync(new DogByIdQuery(command.DogId));
+        var view = _dogViewBuilder.Build(result.DogModel);
+        
+        return CreatedAtRoute(RouteNames.GetDog, new { id = command.DogId }, view);
     }
     
     [HttpGet("dogs", Name = RouteNames.GetDogs)]
@@ -57,7 +65,7 @@ public class MammalsController : Controller
     [HttpGet("dogs/{id:int}", Name = RouteNames.GetDog)]
     public async Task<IActionResult> GetDog([FromRoute] int id)
     {
-        var result = await _queryProcessor.ExecuteAsync(new DogQuery(id));
+        var result = await _queryProcessor.ExecuteAsync(new DogByIdQuery(id));
 
         var view = _dogViewBuilder.Build(result.DogModel);
         
@@ -85,9 +93,13 @@ public class MammalsController : Controller
     [HttpPost("cats", Name = RouteNames.AddCat)]
     public async Task<IActionResult> AddCat([FromBody] AddCatRequest request)
     {
-        await _commandProcessor.SendAsync(new AddCatCommand(request.FavouriteToy));
+        var command = new AddCatCommand(request.FavouriteToy);
+        await _commandProcessor.SendAsync(command);
+
+        var result = await _queryProcessor.ExecuteAsync(new CatByIdQuery(command.CatId));
+        var view = _catViewBuilder.Build(result.CatModel);
         
-        return Ok();
+        return CreatedAtRoute(RouteNames.GetCat, new { id = command.CatId }, view);
     }
     
     [HttpGet("cats", Name = RouteNames.GetCats)]
@@ -99,7 +111,10 @@ public class MammalsController : Controller
     [HttpGet("cats/{id:int}", Name = RouteNames.GetCat)]
     public async Task<IActionResult> GetCat([FromRoute] int id)
     {
-        return StatusCode(StatusCodes.Status418ImATeapot);
+        var result = await _queryProcessor.ExecuteAsync(new CatByIdQuery(id));
+        var view = _catViewBuilder.Build(result.CatModel);
+
+        return Ok(view);
     }
     
     [HttpPut("cats/{id:int}", Name = RouteNames.EditCat)]
