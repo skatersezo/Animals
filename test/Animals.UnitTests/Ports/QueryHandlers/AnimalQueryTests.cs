@@ -27,8 +27,14 @@ public class AnimalQueryTests
         _context = new AnimalContext(_options);
     }
     
+    [TearDown]
+    public void Teardown()
+    {
+        _context.Dispose();
+    }
+    
     [Test]
-    public async Task When_Retrieving_An_Animal_By_Id_As_Authorised_User()
+    public async Task When_Retrieving_An_Animal_By_Id()
     {
         // Arrange
         var cat = new Cat("ball");
@@ -48,7 +54,7 @@ public class AnimalQueryTests
     }
     
     [Test]
-    public async Task When_Retrieving_All_Animals_As_Authorised_User()
+    public async Task When_Retrieving_All_Animals()
     {
         // Arrange
         var cat = new Cat("feather");
@@ -72,7 +78,7 @@ public class AnimalQueryTests
     }
     
     [Test]
-    public async Task When_Retrieving_A_Non_Existing_Animal_As_Authorised_User()
+    public async Task When_Retrieving_A_Non_Existing_Animal()
     {
         // Arrange
         var cat = new Cat("ball");
@@ -87,17 +93,5 @@ public class AnimalQueryTests
         
         // Arrange
         Should.Throw<AnimalNotFoundException>(result.Invoke(), $"Animal with id {id} not found");
-    }
-    
-    [Test]
-    public async Task When_Retrieving_An_Animal_By_Id_As_Unauthorised_User()
-    {
-        throw new NotImplementedException();
-    }
-    
-    [Test]
-    public async Task When_Retrieving_Animals_As_Unauthorised_User()
-    {
-        throw new NotImplementedException();
     }
 }

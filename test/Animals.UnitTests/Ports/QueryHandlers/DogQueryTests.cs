@@ -24,9 +24,15 @@ public class DogQueryTests
 
         _context = new AnimalContext(_options);
     }
+
+    [TearDown]
+    public void Teardown()
+    {
+        _context.Dispose();
+    }
     
     [Test]
-    public async Task When_Retrieving_A_Dog_By_Id_As_Authorised_User()
+    public async Task When_Retrieving_A_Dog_By_Id()
     {
         // Arrange
         var dog = new Dog("Pancho");
@@ -47,7 +53,7 @@ public class DogQueryTests
     }
 
     [Test]
-    public async Task When_Retrieving_Dogs_By_Name_As_Authorised_User()
+    public async Task When_Retrieving_Dogs_By_Name()
     {
         // Arrange
         var dogA = new Dog("Bruno");
@@ -67,7 +73,7 @@ public class DogQueryTests
     }
     
     [Test]
-    public async Task Whe_Retrieving_Non_Existing_Dog_As_Authorised_User()
+    public async Task Whe_Retrieving_Non_Existing_Dog()
     {
         // Arrange
         var dog = new Dog("Pancho");
@@ -82,17 +88,5 @@ public class DogQueryTests
         
         // Arrange
         Should.Throw<DogNotFoundException>(result.Invoke(), $"Dog with id {id} not found");
-    }
-
-    [Test]
-    public async Task When_Retrieving_Dog_By_Id_As_Unauthorised_User()
-    {
-        throw new NotImplementedException();
-    }
-    
-    [Test]
-    public async Task When_Retrieving_Dogs_By_Name_As_Unauthorised_User()
-    {
-        throw new NotImplementedException();
     }
 }

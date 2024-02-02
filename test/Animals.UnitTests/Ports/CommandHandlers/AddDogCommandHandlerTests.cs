@@ -23,8 +23,14 @@ public class AddDogCommandHandlerTests
         _context = new AnimalContext(_options);
     }
     
+    [TearDown]
+    public void Teardown()
+    {
+        _context.Dispose();
+    }
+    
     [Test]
-    public async Task When_Adding_A_Dog_As_Authorised_User()
+    public async Task When_Adding_A_Dog()
     {
         // Arrange
         var command = new AddDogCommand("Balto");

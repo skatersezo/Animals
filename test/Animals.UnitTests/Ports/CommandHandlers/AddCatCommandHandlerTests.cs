@@ -23,8 +23,14 @@ public class AddCatCommandHandlerTests
         _context = new AnimalContext(_options);
     }
     
+    [TearDown]
+    public void Teardown()
+    {
+        _context.Dispose();
+    }
+    
     [Test]
-    public async Task When_Adding_A_Cat_As_Authorised_User()
+    public async Task When_Adding_A_Cat()
     {
         // Arrange
         var command = new AddCatCommand("wool ball");
