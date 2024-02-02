@@ -29,7 +29,8 @@ public class Startup
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "AnimalsAPI", Version = "V1" });
         });
 
-        services.AddDbContext<AnimalContext>(options => options.UseInMemoryDatabase("AnimalsDB"));
+        services.AddDbContext<AnimalContext>(options => options.UseInMemoryDatabase("AnimalsDB"), ServiceLifetime.Singleton);
+        
         services.AddScoped<IAmALinkBuilder, LinkBuilder>();
         services.AddHttpContextAccessor();
 
